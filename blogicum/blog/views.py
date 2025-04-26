@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
 
-POSTS = [
+# Список постов для отображения в блоге
+posts = [
     {
         'id': 0,
         'location': 'Остров отчаянья',
@@ -48,20 +49,20 @@ POSTS = [
 def index(request):
     """Главная страница со списком всех постов."""
     # Сортируем посты в обратном порядке по дате
-    sorted_posts = sorted(POSTS, key=lambda x: x['id'], reverse=True)
+    sorted_posts = sorted(posts, key=lambda x: x['id'], reverse=True)
     return render(request, 'blog/index.html', {'posts': sorted_posts})
 
 
 def post_detail(request, id):
     """Страница с детальной информацией о посте."""
-    post = next(post for post in POSTS if post['id'] == id)
+    post = next(post for post in posts if post['id'] == id)
     return render(request, 'blog/detail.html', {'post': post})
 
 
 def category_posts(request, category_slug):
     """Страница с постами определенной категории."""
     category_posts = [
-        post for post in POSTS
+        post for post in posts
         if post['category'] == category_slug
     ]
     return render(
@@ -72,7 +73,3 @@ def category_posts(request, category_slug):
             'category_slug': category_slug,
         }
     )
-
-
-# Разрешаем импорт списка POSTS из этого модуля
-__all__ = ['POSTS']
