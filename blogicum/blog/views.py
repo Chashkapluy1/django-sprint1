@@ -61,7 +61,7 @@ def post_detail(request, id):
 def category_posts(request, category_slug):
     """Страница с постами определенной категории."""
     category_posts = [
-        post for post in POSTS 
+        post for post in POSTS
         if post['category'] == category_slug
     ]
     return render(
