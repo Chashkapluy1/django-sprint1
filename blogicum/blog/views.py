@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import Http404
 
 
 # Список постов для отображения в блоге
@@ -45,31 +46,30 @@ posts = [
     },
 ]
 
+# Словарь для быстрого доступа к постам по id
+posts_dict = {post['id']: post for post in posts}
+
 
 def index(request):
     """Главная страница со списком всех постов."""
-    # Сортируем посты в обратном порядке по дате
-    sorted_posts = sorted(posts, key=lambda x: x['id'], reverse=True)
-    return render(request, 'blog/index.html', {'posts': sorted_posts})
+    return render(request, 'blog/index.html', {'posts': reversed(posts)})
 
 
-def post_detail(request, id):
+def post_detail(request, post_id):
     """Страница с детальной информацией о посте."""
-    post = next(post for post in posts if post['id'] == id)
-    return render(request, 'blog/detail.html', {'post': post})
+    if post_id not in posts_dict:
+        raise Http404("Пост не найден")
+    return render(request, 'blog/detail.html', {'post': posts_dict[post_id]})
 
 
 def category_posts(request, category_slug):
     """Страница с постами определенной категории."""
-    category_posts = [
-        post for post in posts
-        if post['category'] == category_slug
-    ]
     return render(
         request,
         'blog/category.html',
         {
-            'category_posts': category_posts,
+            'category_posts': [post for post in posts 
+                             if post['category'] == category_slug],
             'category_slug': category_slug,
         }
     )
