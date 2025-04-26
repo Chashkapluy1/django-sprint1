@@ -72,3 +72,7 @@ def category_posts(request, category_slug):
             'category_slug': category_slug,
         }
     )
+
+
+# Разрешаем импорт списка POSTS из этого модуля
+__all__ = ['POSTS']
