@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 
-posts = [
+
+POSTS = [
     {
         'id': 0,
         'location': 'Остров отчаянья',
@@ -35,26 +36,39 @@ posts = [
         'date': '25 октября 1659 года',
         'category': 'not-my-day',
         'text': '''Всю ночь и весь день шёл дождь и дул сильный
-                порывистый ветер. 25 октября.  Корабль за ночь разбило
+                порывистый ветер. 25 октября. Корабль за ночь разбило
                 в щепки; на том месте, где он стоял, торчат какие-то
-                жалкие обломки,  да и те видны только во время отлива.
-                Весь этот день я хлопотал  около вещей: укрывал и
+                жалкие обломки, да и те видны только во время отлива.
+                Весь этот день я хлопотал около вещей: укрывал и
                 укутывал их, чтобы не испортились от дождя.''',
     },
 ]
 
+
 def index(request):
+    """Главная страница со списком всех постов."""
     # Сортируем посты в обратном порядке по дате
-    sorted_posts = sorted(posts, key=lambda x: x['id'], reverse=True)
+    sorted_posts = sorted(POSTS, key=lambda x: x['id'], reverse=True)
     return render(request, 'blog/index.html', {'posts': sorted_posts})
 
+
 def post_detail(request, id):
-    post = next(post for post in posts if post['id'] == id)
+    """Страница с детальной информацией о посте."""
+    post = next(post for post in POSTS if post['id'] == id)
     return render(request, 'blog/detail.html', {'post': post})
 
+
 def category_posts(request, category_slug):
-    category_posts = [post for post in posts if post['category'] == category_slug]
-    return render(request, 'blog/category.html', {
-        'category_posts': category_posts,
-        'category_slug': category_slug
-    })
+    """Страница с постами определенной категории."""
+    category_posts = [
+        post for post in POSTS 
+        if post['category'] == category_slug
+    ]
+    return render(
+        request,
+        'blog/category.html',
+        {
+            'category_posts': category_posts,
+            'category_slug': category_slug,
+        }
+    )
