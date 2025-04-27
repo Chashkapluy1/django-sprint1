@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import Http404
 
 
-# Список постов для отображения в блоге
+# Список постов для отображения в блоге.
 posts = [
     {
         'id': 0,
@@ -68,8 +68,10 @@ def category_posts(request, category_slug):
         request,
         'blog/category.html',
         {
-            'category_posts': [post for post in posts 
-                             if post['category'] == category_slug],
+            'category_posts': [
+                post for post in posts
+                if post['category'] == category_slug
+            ],
             'category_slug': category_slug,
         }
     )
