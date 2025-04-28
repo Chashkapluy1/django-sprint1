@@ -1,5 +1,5 @@
-from django.shortcuts import render
 from django.http import Http404
+from django.shortcuts import render
 
 
 # Список постов для отображения в блоге.
@@ -52,14 +52,31 @@ posts_dict = {post['id']: post for post in posts}
 
 def index(request):
     """Главная страница со списком всех постов."""
-    return render(request, 'blog/index.html', {'posts': reversed(posts)})
+    return render(
+        request,
+        'blog/index.html',
+        {
+            'posts': reversed(posts),
+        }
+    )
 
 
 def post_detail(request, post_id):
-    """Страница с детальной информацией о посте."""
+    """Страница с детальной информацией о посте.
+
+    Args:
+        post_id: ID поста, который не был найден (при ошибке 404).
+    """
     if post_id not in posts_dict:
-        raise Http404("Пост не найден")
-    return render(request, 'blog/detail.html', {'post': posts_dict[post_id]})
+        raise Http404(f'Пост с id={post_id} не найден')
+
+    return render(
+        request,
+        'blog/detail.html',
+        {
+            'post': posts_dict[post_id],
+        }
+    )
 
 
 def category_posts(request, category_slug):
